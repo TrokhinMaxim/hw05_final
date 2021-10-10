@@ -80,16 +80,18 @@ class PostUrlTests(TestCase):
             author=self.author
         )
 
-    def test_follow_unfollow_auth(self):
+    def test_follow_auth(self):
         profile_follow_url = reverse(
             'posts:profile_follow', args=[self.author.username])
-        profile_unfollow_url = reverse(
-            'posts:profile_unfollow', args=[self.author.username])
         self.authorized_client_not_author.get(profile_follow_url)
         self.assertTrue(
             Follow.objects.filter(
                 user=self.not_author, author=self.author).exists()
         )
+
+    def test_unfollow_auth(self):
+        profile_unfollow_url = reverse(
+            'posts:profile_unfollow', args=[self.author.username])
         self.authorized_client_not_author.get(profile_unfollow_url)
         self.assertFalse(
             Follow.objects.filter(
